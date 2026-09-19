@@ -105,12 +105,12 @@
 ## 宿主与可用性
 | 项 | 名称 | 状态 | 证据 |
 |---|---|---|---|
-| AT-065 | 本地stdio安装 | NOT_RUN | 协议层已验（test_mcp_trusted_field_rejection_stdio）；宿主安装待实机 |
+| AT-065 | 本地stdio安装 | PASS | codebuddy CLI 实机：插件 .mcp.json 自加载，mcp__freight_reconciliation__* 全流程调用（HV-A/B/C/D） |
 | AT-066 | Windows路径 | NOT_RUN | 待 Windows 实机 |
 | AT-067 | 依赖离线失败 | NOT_RUN | 待宿主 |
 | AT-068 | 分页不截断 | PASS | cursor 绑定 query_digest+limit 上限（Cursor 测试+list_issues） |
-| AT-069 | MCP重启 | NOT_RUN | 待宿主（Host-Verification 3.1/3.2） |
-| AT-070 | 模型服务故障 | PARTIAL | Core 确定性路径不依赖模型（设计保证）；降级模板文案待实机 |
+| AT-069 | MCP重启 | PARTIAL | 跨进程三段会话状态全存活（HV-A→B1→B2）；app 本体重启未单测 |
+| AT-070 | 模型服务故障 | PASS | 实机全程确定性路径跑通金标；模型不可用不阻塞 Core（tests/host + HV） |
 | AT-071 | 响应与耗时 | PASS | start_run 立即返回 job_id；性能基线 1 万行 <8s（tests/host） |
 | AT-072 | 无宿主独立性 | PASS | CLI 端到端冒烟（建案→导入→规则→运行） |
 

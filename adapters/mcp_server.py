@@ -29,7 +29,8 @@ DEFAULT_ROOT = os.environ.get(
     str(Path.home() / ".local" / "share" / "freight-reconciliation"))
 
 TRUSTED_FIELDS = {"workspace_id", "actor_id", "confirmed", "approval_token",
-                  "confirmation_ref", "nonce"}
+                  "confirmation_ref", "nonce", "confirm", "activate", "release",
+                  "approval", "approve"}
 
 TOOL_NAMES = [
     "freight_create_case", "freight_register_asset", "freight_inspect_asset",
@@ -129,13 +130,20 @@ class McpServer:
                 "field_path": ",".join(sorted(leaked)),
                 "recovery_action": "remove trusted fields; the server injects the workspace context"})
         try:
-            data = self.dispatch[name](**args)
+            data = self.dispatch[name](**self._coerce(name, args))
         except FreightError as exc:
             return self._tool_error(request_id, exc.to_dict())
         except TypeError as exc:
             return self._tool_error(request_id, {
                 "code": "INVALID_INPUT", "message": str(exc), "retryable": False,
                 "field_path": "arguments", "recovery_action": "check tool input schema"})
+        except Exception as exc:  # noqa: BLE001 — 连接器进程绝不因单个坏请求而死
+            sys.stderr.write(f"[mcp] internal error in {name}: {type(exc).__name__}: "
+                             f"{exc}\n")
+            return self._tool_error(request_id, {
+                "code": "INTERNAL", "message": f"{type(exc).__name__}: {exc}",
+                "retryable": True, "field_path": None,
+                "recovery_action": "check arguments; if persistent, inspect connector logs"})
         case_id = (args.get("case_id") or (data or {}).get("case_id")
                    or (data or {}).get("id"))
         envelope = {
@@ -146,6 +154,52 @@ class McpServer:
         return {"content": [{"type": "text",
                              "text": json.dumps(envelope, ensure_ascii=False)}],
                 "isError": False}
+
+    @staticmethod
+    def _coerce(name: str, args: dict) -> dict:
+        """契约对齐与模型实机形态矫正（HV 实测发现）：
+
+        - kind 按 02_contracts/mcp-tools.draft.json 枚举（TRIPS/BILL/RATES/POD/
+          ACCESSORIAL/HISTORY）映射到 Core 内部小写类别；小写原值亦兼容；
+        - upload_handle（契约名）→ upload_path（Core 参数名）；
+        - header 传成 JSON 字符串时解析回列表；
+        - fields 按契约的 [{source_column,target_field}] 转成映射 dict。
+        """
+        args = dict(args)
+        kind_map = {"trips": "trips", "bill": "bill", "rates": "rates", "pod": "pod",
+                    "accessorial": "waiting", "waiting": "waiting",
+                    "history": "history_trips",
+                    "receipts": "receipts", "history_trips": "history_trips"}
+        if "kind" in args and isinstance(args["kind"], str):
+            lowered = args["kind"].strip().lower()
+            args["kind"] = kind_map.get(lowered, lowered)
+        if "upload_handle" in args and "upload_path" not in args:
+            args["upload_path"] = args.pop("upload_handle")
+        header = args.get("header")
+        if isinstance(header, str):
+            try:
+                header = json.loads(header)
+            except json.JSONDecodeError:
+                header = [c for c in header.split(",") if c.strip()]
+            if not isinstance(header, list):
+                raise ValueError("header must be a JSON array of column names")
+            args["header"] = [str(h).strip() for h in header]
+        fields = args.get("fields")
+        if isinstance(fields, list):
+            mapping = {}
+            for item in fields:
+                if isinstance(item, dict) and "source_column" in item:
+                    mapping[str(item["source_column"])] = str(
+                        item.get("target_field", item["source_column"]))
+                elif isinstance(item, str):
+                    mapping[item] = item
+            args["fields"] = mapping
+        elif isinstance(fields, str):
+            try:
+                args["fields"] = json.loads(fields)
+            except json.JSONDecodeError:
+                args["fields"] = None
+        return args
 
     def _case_revision(self, case_id: str | None) -> int | None:
         if not case_id:

@@ -641,7 +641,11 @@ class ReconciliationService:
         if case["workspace_id"] != self.workspace_id:
             raise NotFound("case not found in this workspace")
         if expected_revision is not None and case["case_revision"] != expected_revision:
-            raise VersionConflict("case revision mismatch")
+            raise VersionConflict(
+                f"case revision mismatch: sent {expected_revision}, "
+                f"current is {case['case_revision']}; re-read the case and retry once "
+                f"with current revision, or omit expected_revision",
+                recovery_action=f"retry with expected_revision={case['case_revision']}")
         return case
 
     def get_case(self, case_id: str) -> dict:
