@@ -100,9 +100,11 @@ class Handler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(data)
 
-    def _redirect(self, location: str) -> None:
+    def _redirect(self, location: str, headers: dict | None = None) -> None:
         self.send_response(303)
         self.send_header("Location", location)
+        for k, v in (headers or {}).items():
+            self.send_header(k, v)
         self.end_headers()
 
     def _form(self, action: str, label: str, disabled: bool = False) -> str:

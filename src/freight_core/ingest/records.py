@@ -218,6 +218,7 @@ def parse_pod_row(row: dict, row_number: int, unit: str = "minor") -> dict:
 
 ROW_PARSERS = {
     "trips": (parse_trips_row, {}),
+    "history_trips": (parse_trips_row, {}),
     "bill": (parse_bill_row, {}),
     "rates": (parse_rates_row, {}),
     "waiting": (parse_waiting_row, {}),

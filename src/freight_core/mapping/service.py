@@ -12,6 +12,8 @@ from ..money import canonical_hash
 REQUIRED_FIELDS = {
     "trips": ["trip_id", "carrier_id", "route_id", "vehicle_class", "service_leg_id",
               "departed_at", "execution_status"],
+    "history_trips": ["trip_id", "carrier_id", "route_id", "vehicle_class",
+                      "service_leg_id", "departed_at", "execution_status"],
     "bill": ["line_id", "carrier_id", "trip_ref", "service_leg_id", "charge_code",
              "occurrence_id", "amount_minor", "currency", "amount_basis"],
     "rates": ["rule_id", "version", "carrier_id", "route_id", "vehicle_class",

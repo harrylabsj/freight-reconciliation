@@ -1,0 +1,26 @@
+{
+  "$comment": "本地 stdio 连接器声明草稿（§18.2）。一个连接器只配置一个 MCP Server。字段名与必填项以 WorkBuddy 平台当前官方文档为准，提交前实机验证；不得凭本文件宣称可上架。",
+  "name": "freight-reconciliation",
+  "display_name": "海纳·运费对账",
+  "version": "0.2.0",
+  "transport": {
+    "type": "stdio",
+    "command": "python3",
+    "args": ["adapters/mcp_server.py"],
+    "cwd_note": "command/args 必须用安装后自定位的绝对路径表达；打包后的资源位置与相对路径行为在 M4 实机验证",
+    "env": {
+      "FREIGHT_RECON_ROOT": {
+        "default": "~/.local/share/freight-reconciliation",
+        "description": "案件库与私有文件根目录；WAL 模式 SQLite，不得放在网络共享盘"
+      }
+    },
+    "response_note": "长任务（导入/重算）立即返回 job_id，客户端以 freight_get_job 轮询；单次请求建议 30 秒内返回"
+  },
+  "tools_count": 14,
+  "tools_source": "02_contracts/mcp-tools.draft.json",
+  "security": {
+    "trusted_fields_rejected": ["workspace_id", "actor_id", "confirmed", "approval_token", "confirmation_ref", "nonce"],
+    "confirmation": "模型不可触达最终确认；确认路由在本地管理页 /admin/confirmations",
+    "data_boundary": "原文件与算术默认留在本地 Core；模型经工具获得脱敏投影（§20.1）"
+  }
+}
