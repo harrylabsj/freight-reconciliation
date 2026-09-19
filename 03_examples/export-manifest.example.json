@@ -1,0 +1,23 @@
+{
+  "schema_version": "0.1.0",
+  "export_id": "EXPORT-DEMO",
+  "workspace_id": "WS-DEMO",
+  "run_id": "RUN-DEMO",
+  "input_digest": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+  "projection": "CARRIER_REDACTED",
+  "purpose": "CARRIER_CHECK",
+  "status": "PREPARED",
+  "actor_id": "USER-DEMO",
+  "confirmation_ref": null,
+  "unresolved_group_count": 6,
+  "coverage_note": "仅合成示例；金额可比9/12行，不能证明已付款",
+  "artifacts": [
+    {
+      "filename": "example.md",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+      "byte_size": 0,
+      "mime_type": "text/markdown"
+    }
+  ],
+  "created_at": "2026-09-19T09:02:00+08:00"
+}

@@ -1,0 +1,11 @@
+﻿schema_version,rule_id,version,workspace_id,carrier_id,route_id,vehicle_class,charge_code,currency,amount_basis,effective_from,effective_to,formula,rate_minor,free_seconds,block_seconds,cap_minor,confirmed,confirmation_ref,source_refs
+0.1.0,R01,1,WS-DEMO,C-DEMO,ROUTE-01,CLASS-DEMO,BASE,CNY,GROSS,2026-09-01T00:00:00+08:00,2026-10-01T00:00:00+08:00,PER_TRIP,100000,7200,1800,,True,confirm-rule-01,"[""synthetic:rates.csv#row=2""]"
+0.1.0,R02,1,WS-DEMO,C-DEMO,ROUTE-02,CLASS-DEMO,BASE,CNY,GROSS,2026-09-01T00:00:00+08:00,2026-10-01T00:00:00+08:00,PER_TRIP,120000,7200,1800,,True,confirm-rule-02,"[""synthetic:rates.csv#row=3""]"
+0.1.0,R03,1,WS-DEMO,C-DEMO,ROUTE-03,CLASS-DEMO,WAIT,CNY,GROSS,2026-09-01T00:00:00+08:00,2026-10-01T00:00:00+08:00,WAIT_BLOCKS,5000,7200,1800,,True,confirm-rule-03,"[""synthetic:rates.csv#row=4""]"
+0.1.0,R04,1,WS-DEMO,C-DEMO,ROUTE-04,CLASS-DEMO,BASE,CNY,GROSS,2026-09-01T00:00:00+08:00,2026-10-01T00:00:00+08:00,PER_TRIP,150000,7200,1800,,True,confirm-rule-04,"[""synthetic:rates.csv#row=5""]"
+0.1.0,R05,1,WS-DEMO,C-DEMO,ROUTE-05,CLASS-DEMO,TOLL,CNY,GROSS,2026-09-01T00:00:00+08:00,2026-10-01T00:00:00+08:00,ACTUAL_RECEIPT,0,7200,1800,,True,confirm-rule-05,"[""synthetic:rates.csv#row=6""]"
+0.1.0,R06,1,WS-DEMO,C-DEMO,ROUTE-06,CLASS-DEMO,BASE,CNY,GROSS,2026-09-01T00:00:00+08:00,2026-10-01T00:00:00+08:00,PER_TRIP,110000,7200,1800,,True,confirm-rule-06,"[""synthetic:rates.csv#row=7""]"
+0.1.0,R07,1,WS-DEMO,C-DEMO,ROUTE-07,CLASS-DEMO,BASE,CNY,NET,2026-09-01T00:00:00+08:00,2026-10-01T00:00:00+08:00,PER_TRIP,90000,7200,1800,,True,confirm-rule-07,"[""synthetic:rates.csv#row=8""]"
+0.1.0,R08,1,WS-DEMO,C-DEMO,ROUTE-08,CLASS-DEMO,BASE,CNY,GROSS,2026-09-01T00:00:00+08:00,2026-10-01T00:00:00+08:00,PER_TRIP,125000,7200,1800,,True,confirm-rule-08,"[""synthetic:rates.csv#row=9""]"
+0.1.0,R09,1,WS-DEMO,C-DEMO,ROUTE-09,CLASS-DEMO,BASE,CNY,GROSS,2026-09-01T00:00:00+08:00,2026-10-01T00:00:00+08:00,PER_TRIP,110000,7200,1800,,True,confirm-rule-09,"[""synthetic:rates.csv#row=10""]"
+0.1.0,R10,1,WS-DEMO,C-DEMO,ROUTE-10,CLASS-DEMO,BASE,CNY,GROSS,2026-09-01T00:00:00+08:00,2026-10-01T00:00:00+08:00,PER_TRIP,70000,7200,1800,,True,confirm-rule-10,"[""synthetic:rates.csv#row=11""]"

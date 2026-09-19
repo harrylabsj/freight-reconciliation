@@ -1,0 +1,24 @@
+{
+  "schema_version": "0.1.0",
+  "rule_id": "R01",
+  "version": 1,
+  "workspace_id": "WS-DEMO",
+  "carrier_id": "C-DEMO",
+  "route_id": "ROUTE-01",
+  "vehicle_class": "CLASS-DEMO",
+  "charge_code": "BASE",
+  "currency": "CNY",
+  "amount_basis": "GROSS",
+  "effective_from": "2026-09-01T00:00:00+08:00",
+  "effective_to": "2026-10-01T00:00:00+08:00",
+  "formula": "PER_TRIP",
+  "rate_minor": 100000,
+  "free_seconds": 7200,
+  "block_seconds": 1800,
+  "cap_minor": null,
+  "confirmed": true,
+  "confirmation_ref": "confirm-rule-01",
+  "source_refs": [
+    "synthetic:rates.csv#row=2"
+  ]
+}

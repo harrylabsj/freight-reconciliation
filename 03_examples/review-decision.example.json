@@ -1,0 +1,17 @@
+{
+  "schema_version": "0.1.0",
+  "decision_id": "DEC-DEMO",
+  "workspace_id": "WS-DEMO",
+  "run_id": "RUN-DEMO",
+  "group_id": "G02",
+  "result_digest": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+  "actor_id": "USER-DEMO",
+  "decision": "NEEDS_EVIDENCE",
+  "reason": "请核对费率调整依据（合成）",
+  "source_refs": [
+    "synthetic:rate-clause"
+  ],
+  "status": "PREPARED",
+  "confirmed_at": null,
+  "confirmation_ref": null
+}

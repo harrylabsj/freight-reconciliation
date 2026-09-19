@@ -1,0 +1,20 @@
+{
+  "schema_version": "0.1.0",
+  "mapping_id": "MAP-DEMO",
+  "version": 1,
+  "workspace_id": "WS-DEMO",
+  "carrier_id": "C-DEMO",
+  "structure_digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "fields": [
+    {
+      "source_column": "amount_minor",
+      "target_field": "amount_minor",
+      "data_type": "MONEY_MINOR",
+      "unit": "CNY-fen",
+      "amount_basis": "GROSS",
+      "source_timezone": null
+    }
+  ],
+  "confirmed": true,
+  "confirmation_ref": "synthetic-confirm-map"
+}

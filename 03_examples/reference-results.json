@@ -1,0 +1,240 @@
+{
+  "reference_only": true,
+  "summary": {
+    "bill_line_count": 12,
+    "group_count": 10,
+    "comparable_line_count": 9,
+    "comparable_group_count": 7,
+    "source_signed_total_minor": 1062000,
+    "comparable_billed_minor": 885000,
+    "expected_comparable_minor": 725000,
+    "unresolved_billed_minor": 177000,
+    "positive_difference_minor": 165000,
+    "negative_difference_minor": -5000,
+    "net_difference_minor": 160000,
+    "abs_total_billed_minor": 1082000,
+    "abs_comparable_billed_minor": 905000
+  },
+  "results": [
+    {
+      "schema_version": "0.1.0",
+      "group_id": "G01",
+      "comparison_status": "COMPARABLE",
+      "evidence_status": "COMPLETE",
+      "billed_minor": 100000,
+      "expected_minor": 100000,
+      "delta_minor": 0,
+      "rule_ref": "R01@1",
+      "issues": [],
+      "trace": [
+        "PER_TRIP: 1 * 100000 = 100000",
+        "DELTA: 100000 - 100000 = 0"
+      ],
+      "source_refs": [
+        "synthetic:bill.csv#line=B01a",
+        "synthetic:rates.csv#row=2",
+        "synthetic:trips.csv#trip=T001"
+      ],
+      "result_digest": "6a90fb95d4f2304773fbd266c607ba53db3cba17408c1960abdbcbfd6468ca2f"
+    },
+    {
+      "schema_version": "0.1.0",
+      "group_id": "G02",
+      "comparison_status": "COMPARABLE",
+      "evidence_status": "COMPLETE",
+      "billed_minor": 130000,
+      "expected_minor": 120000,
+      "delta_minor": 10000,
+      "rule_ref": "R02@1",
+      "issues": [
+        "AMOUNT_HIGH"
+      ],
+      "trace": [
+        "PER_TRIP: 1 * 120000 = 120000",
+        "DELTA: 130000 - 120000 = 10000"
+      ],
+      "source_refs": [
+        "synthetic:bill.csv#line=B02a",
+        "synthetic:rates.csv#row=3",
+        "synthetic:trips.csv#trip=T002"
+      ],
+      "result_digest": "549a8a15f9c24e260a668846af07e348883dd172fbe5bce549aa50bfb74dac70"
+    },
+    {
+      "schema_version": "0.1.0",
+      "group_id": "G03",
+      "comparison_status": "COMPARABLE",
+      "evidence_status": "COMPLETE",
+      "billed_minor": 15000,
+      "expected_minor": 10000,
+      "delta_minor": 5000,
+      "rule_ref": "R03@1",
+      "issues": [
+        "AMOUNT_HIGH"
+      ],
+      "trace": [
+        "WAIT_BLOCKS: ceil(max(0,10800-7200)/1800) * 5000 = 10000",
+        "DELTA: 15000 - 10000 = 5000"
+      ],
+      "source_refs": [
+        "synthetic:bill.csv#line=B03a",
+        "synthetic:rates.csv#row=4",
+        "synthetic:trips.csv#trip=T003",
+        "synthetic:waiting.csv#event=E03"
+      ],
+      "result_digest": "ba415dc041860fd992d438dcc71e07a252000f89d77577b45d63407e0ba9979b"
+    },
+    {
+      "schema_version": "0.1.0",
+      "group_id": "G04",
+      "comparison_status": "COMPARABLE",
+      "evidence_status": "COMPLETE",
+      "billed_minor": 300000,
+      "expected_minor": 150000,
+      "delta_minor": 150000,
+      "rule_ref": "R04@1",
+      "issues": [
+        "AMOUNT_HIGH",
+        "DUPLICATE_SUSPECT"
+      ],
+      "trace": [
+        "PER_TRIP: 1 * 150000 = 150000",
+        "DELTA: 300000 - 150000 = 150000"
+      ],
+      "source_refs": [
+        "synthetic:bill.csv#line=B04a",
+        "synthetic:bill.csv#line=B04b",
+        "synthetic:rates.csv#row=5",
+        "synthetic:trips.csv#trip=T004"
+      ],
+      "result_digest": "82e10cb5f7f4030d551b6503a8aabe286e683d7dbfc25561aba178aee38244f9"
+    },
+    {
+      "schema_version": "0.1.0",
+      "group_id": "G05",
+      "comparison_status": "NOT_COMPARABLE",
+      "evidence_status": "MISSING",
+      "billed_minor": 8000,
+      "expected_minor": null,
+      "delta_minor": null,
+      "rule_ref": "R05@1",
+      "issues": [
+        "MISSING_RECEIPT"
+      ],
+      "trace": [],
+      "source_refs": [
+        "synthetic:bill.csv#line=B05a",
+        "synthetic:rates.csv#row=6",
+        "synthetic:trips.csv#trip=T005"
+      ],
+      "result_digest": "04d13b3f57da22b5d90d3c13f2ed77240922e3ff212ea734ffa0792aff57be82"
+    },
+    {
+      "schema_version": "0.1.0",
+      "group_id": "G06",
+      "comparison_status": "COMPARABLE",
+      "evidence_status": "COMPLETE",
+      "billed_minor": 105000,
+      "expected_minor": 110000,
+      "delta_minor": -5000,
+      "rule_ref": "R06@1",
+      "issues": [
+        "AMOUNT_LOW"
+      ],
+      "trace": [
+        "PER_TRIP: 1 * 110000 = 110000",
+        "DELTA: 105000 - 110000 = -5000"
+      ],
+      "source_refs": [
+        "synthetic:bill.csv#line=B06a",
+        "synthetic:rates.csv#row=7",
+        "synthetic:trips.csv#trip=T006"
+      ],
+      "result_digest": "c420f808a51cedaaad64b974b86d9653c09c74465fa08bc9fa50ee16e6d1ded6"
+    },
+    {
+      "schema_version": "0.1.0",
+      "group_id": "G07",
+      "comparison_status": "NOT_COMPARABLE",
+      "evidence_status": "COMPLETE",
+      "billed_minor": 99000,
+      "expected_minor": null,
+      "delta_minor": null,
+      "rule_ref": "R07@1",
+      "issues": [
+        "BASIS_MISMATCH"
+      ],
+      "trace": [],
+      "source_refs": [
+        "synthetic:bill.csv#line=B07a",
+        "synthetic:rates.csv#row=8",
+        "synthetic:trips.csv#trip=T007"
+      ],
+      "result_digest": "acc7af6a6a9680b345f7931e0f4faf5434c72d362fcbdb94cf181f058dc9806a"
+    },
+    {
+      "schema_version": "0.1.0",
+      "group_id": "G08",
+      "comparison_status": "COMPARABLE",
+      "evidence_status": "MISSING",
+      "billed_minor": 125000,
+      "expected_minor": 125000,
+      "delta_minor": 0,
+      "rule_ref": "R08@1",
+      "issues": [
+        "MISSING_POD"
+      ],
+      "trace": [
+        "PER_TRIP: 1 * 125000 = 125000",
+        "DELTA: 125000 - 125000 = 0"
+      ],
+      "source_refs": [
+        "synthetic:bill.csv#line=B08a",
+        "synthetic:rates.csv#row=9",
+        "synthetic:trips.csv#trip=T008"
+      ],
+      "result_digest": "bb87f6a8076336f2bebcde0f7102031f077590da49823257adaf0846d76660db"
+    },
+    {
+      "schema_version": "0.1.0",
+      "group_id": "G09",
+      "comparison_status": "COMPARABLE",
+      "evidence_status": "COMPLETE",
+      "billed_minor": 110000,
+      "expected_minor": 110000,
+      "delta_minor": 0,
+      "rule_ref": "R09@1",
+      "issues": [],
+      "trace": [
+        "PER_TRIP: 1 * 110000 = 110000",
+        "DELTA: 110000 - 110000 = 0"
+      ],
+      "source_refs": [
+        "synthetic:bill.csv#line=B09a",
+        "synthetic:bill.csv#line=B09b",
+        "synthetic:rates.csv#row=10",
+        "synthetic:trips.csv#trip=T009"
+      ],
+      "result_digest": "51cc7cb58b1a203802f53c5dca4d07645a9cfbe0da9d236234080a18324b35b4"
+    },
+    {
+      "schema_version": "0.1.0",
+      "group_id": "G10",
+      "comparison_status": "NOT_COMPARABLE",
+      "evidence_status": "COMPLETE",
+      "billed_minor": 70000,
+      "expected_minor": null,
+      "delta_minor": null,
+      "rule_ref": null,
+      "issues": [
+        "UNMATCHED"
+      ],
+      "trace": [],
+      "source_refs": [
+        "synthetic:bill.csv#line=B10a",
+        "synthetic:trips.csv#trip=T010"
+      ],
+      "result_digest": "aa29f6dc6938bdaf06db5bd9f5101b3b503b51838ca6c5078c5811772a5d7f74"
+    }
+  ]
+}

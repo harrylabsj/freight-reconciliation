@@ -1,0 +1,636 @@
+[
+  {
+    "schema_version": "0.1.0",
+    "group_id": "G01",
+    "workspace_id": "WS-DEMO",
+    "carrier_id": "C-DEMO",
+    "trip_id": "T001",
+    "service_leg_id": "LEG-1",
+    "occurrence_id": "BASE",
+    "route_id": "ROUTE-01",
+    "vehicle_class": "CLASS-DEMO",
+    "charge_code": "BASE",
+    "service_time": "2026-09-01T08:00:00+08:00",
+    "currency": "CNY",
+    "amount_basis": "GROSS",
+    "match_state": "EXACT",
+    "trip_status": "EXECUTED",
+    "pod_state": "VERIFIED",
+    "event": {
+      "elapsed_seconds": null,
+      "time_evidence_verified": false,
+      "receipt_minor": null,
+      "receipt_verified": false,
+      "source_refs": []
+    },
+    "bill_lines": [
+      {
+        "line_id": "B01a",
+        "amount_minor": 100000,
+        "reversal_of": null,
+        "source_ref": "synthetic:bill.csv#line=B01a"
+      }
+    ],
+    "rules": [
+      {
+        "schema_version": "0.1.0",
+        "rule_id": "R01",
+        "version": 1,
+        "workspace_id": "WS-DEMO",
+        "carrier_id": "C-DEMO",
+        "route_id": "ROUTE-01",
+        "vehicle_class": "CLASS-DEMO",
+        "charge_code": "BASE",
+        "currency": "CNY",
+        "amount_basis": "GROSS",
+        "effective_from": "2026-09-01T00:00:00+08:00",
+        "effective_to": "2026-10-01T00:00:00+08:00",
+        "formula": "PER_TRIP",
+        "rate_minor": 100000,
+        "free_seconds": 7200,
+        "block_seconds": 1800,
+        "cap_minor": null,
+        "confirmed": true,
+        "confirmation_ref": "confirm-rule-01",
+        "source_refs": [
+          "synthetic:rates.csv#row=2"
+        ]
+      }
+    ],
+    "source_refs": [
+      "synthetic:trips.csv#trip=T001"
+    ]
+  },
+  {
+    "schema_version": "0.1.0",
+    "group_id": "G02",
+    "workspace_id": "WS-DEMO",
+    "carrier_id": "C-DEMO",
+    "trip_id": "T002",
+    "service_leg_id": "LEG-1",
+    "occurrence_id": "BASE",
+    "route_id": "ROUTE-02",
+    "vehicle_class": "CLASS-DEMO",
+    "charge_code": "BASE",
+    "service_time": "2026-09-02T08:00:00+08:00",
+    "currency": "CNY",
+    "amount_basis": "GROSS",
+    "match_state": "EXACT",
+    "trip_status": "EXECUTED",
+    "pod_state": "VERIFIED",
+    "event": {
+      "elapsed_seconds": null,
+      "time_evidence_verified": false,
+      "receipt_minor": null,
+      "receipt_verified": false,
+      "source_refs": []
+    },
+    "bill_lines": [
+      {
+        "line_id": "B02a",
+        "amount_minor": 130000,
+        "reversal_of": null,
+        "source_ref": "synthetic:bill.csv#line=B02a"
+      }
+    ],
+    "rules": [
+      {
+        "schema_version": "0.1.0",
+        "rule_id": "R02",
+        "version": 1,
+        "workspace_id": "WS-DEMO",
+        "carrier_id": "C-DEMO",
+        "route_id": "ROUTE-02",
+        "vehicle_class": "CLASS-DEMO",
+        "charge_code": "BASE",
+        "currency": "CNY",
+        "amount_basis": "GROSS",
+        "effective_from": "2026-09-01T00:00:00+08:00",
+        "effective_to": "2026-10-01T00:00:00+08:00",
+        "formula": "PER_TRIP",
+        "rate_minor": 120000,
+        "free_seconds": 7200,
+        "block_seconds": 1800,
+        "cap_minor": null,
+        "confirmed": true,
+        "confirmation_ref": "confirm-rule-02",
+        "source_refs": [
+          "synthetic:rates.csv#row=3"
+        ]
+      }
+    ],
+    "source_refs": [
+      "synthetic:trips.csv#trip=T002"
+    ]
+  },
+  {
+    "schema_version": "0.1.0",
+    "group_id": "G03",
+    "workspace_id": "WS-DEMO",
+    "carrier_id": "C-DEMO",
+    "trip_id": "T003",
+    "service_leg_id": "LEG-1",
+    "occurrence_id": "EVENT-1",
+    "route_id": "ROUTE-03",
+    "vehicle_class": "CLASS-DEMO",
+    "charge_code": "WAIT",
+    "service_time": "2026-09-03T08:00:00+08:00",
+    "currency": "CNY",
+    "amount_basis": "GROSS",
+    "match_state": "EXACT",
+    "trip_status": "EXECUTED",
+    "pod_state": "VERIFIED",
+    "event": {
+      "elapsed_seconds": 10800,
+      "time_evidence_verified": true,
+      "receipt_minor": null,
+      "receipt_verified": false,
+      "source_refs": [
+        "synthetic:waiting.csv#event=E03"
+      ]
+    },
+    "bill_lines": [
+      {
+        "line_id": "B03a",
+        "amount_minor": 15000,
+        "reversal_of": null,
+        "source_ref": "synthetic:bill.csv#line=B03a"
+      }
+    ],
+    "rules": [
+      {
+        "schema_version": "0.1.0",
+        "rule_id": "R03",
+        "version": 1,
+        "workspace_id": "WS-DEMO",
+        "carrier_id": "C-DEMO",
+        "route_id": "ROUTE-03",
+        "vehicle_class": "CLASS-DEMO",
+        "charge_code": "WAIT",
+        "currency": "CNY",
+        "amount_basis": "GROSS",
+        "effective_from": "2026-09-01T00:00:00+08:00",
+        "effective_to": "2026-10-01T00:00:00+08:00",
+        "formula": "WAIT_BLOCKS",
+        "rate_minor": 5000,
+        "free_seconds": 7200,
+        "block_seconds": 1800,
+        "cap_minor": null,
+        "confirmed": true,
+        "confirmation_ref": "confirm-rule-03",
+        "source_refs": [
+          "synthetic:rates.csv#row=4"
+        ]
+      }
+    ],
+    "source_refs": [
+      "synthetic:trips.csv#trip=T003"
+    ]
+  },
+  {
+    "schema_version": "0.1.0",
+    "group_id": "G04",
+    "workspace_id": "WS-DEMO",
+    "carrier_id": "C-DEMO",
+    "trip_id": "T004",
+    "service_leg_id": "LEG-1",
+    "occurrence_id": "BASE",
+    "route_id": "ROUTE-04",
+    "vehicle_class": "CLASS-DEMO",
+    "charge_code": "BASE",
+    "service_time": "2026-09-04T08:00:00+08:00",
+    "currency": "CNY",
+    "amount_basis": "GROSS",
+    "match_state": "EXACT",
+    "trip_status": "EXECUTED",
+    "pod_state": "VERIFIED",
+    "event": {
+      "elapsed_seconds": null,
+      "time_evidence_verified": false,
+      "receipt_minor": null,
+      "receipt_verified": false,
+      "source_refs": []
+    },
+    "bill_lines": [
+      {
+        "line_id": "B04a",
+        "amount_minor": 150000,
+        "reversal_of": null,
+        "source_ref": "synthetic:bill.csv#line=B04a"
+      },
+      {
+        "line_id": "B04b",
+        "amount_minor": 150000,
+        "reversal_of": null,
+        "source_ref": "synthetic:bill.csv#line=B04b"
+      }
+    ],
+    "rules": [
+      {
+        "schema_version": "0.1.0",
+        "rule_id": "R04",
+        "version": 1,
+        "workspace_id": "WS-DEMO",
+        "carrier_id": "C-DEMO",
+        "route_id": "ROUTE-04",
+        "vehicle_class": "CLASS-DEMO",
+        "charge_code": "BASE",
+        "currency": "CNY",
+        "amount_basis": "GROSS",
+        "effective_from": "2026-09-01T00:00:00+08:00",
+        "effective_to": "2026-10-01T00:00:00+08:00",
+        "formula": "PER_TRIP",
+        "rate_minor": 150000,
+        "free_seconds": 7200,
+        "block_seconds": 1800,
+        "cap_minor": null,
+        "confirmed": true,
+        "confirmation_ref": "confirm-rule-04",
+        "source_refs": [
+          "synthetic:rates.csv#row=5"
+        ]
+      }
+    ],
+    "source_refs": [
+      "synthetic:trips.csv#trip=T004"
+    ]
+  },
+  {
+    "schema_version": "0.1.0",
+    "group_id": "G05",
+    "workspace_id": "WS-DEMO",
+    "carrier_id": "C-DEMO",
+    "trip_id": "T005",
+    "service_leg_id": "LEG-1",
+    "occurrence_id": "EVENT-1",
+    "route_id": "ROUTE-05",
+    "vehicle_class": "CLASS-DEMO",
+    "charge_code": "TOLL",
+    "service_time": "2026-09-05T08:00:00+08:00",
+    "currency": "CNY",
+    "amount_basis": "GROSS",
+    "match_state": "EXACT",
+    "trip_status": "EXECUTED",
+    "pod_state": "VERIFIED",
+    "event": {
+      "elapsed_seconds": null,
+      "time_evidence_verified": false,
+      "receipt_minor": null,
+      "receipt_verified": false,
+      "source_refs": []
+    },
+    "bill_lines": [
+      {
+        "line_id": "B05a",
+        "amount_minor": 8000,
+        "reversal_of": null,
+        "source_ref": "synthetic:bill.csv#line=B05a"
+      }
+    ],
+    "rules": [
+      {
+        "schema_version": "0.1.0",
+        "rule_id": "R05",
+        "version": 1,
+        "workspace_id": "WS-DEMO",
+        "carrier_id": "C-DEMO",
+        "route_id": "ROUTE-05",
+        "vehicle_class": "CLASS-DEMO",
+        "charge_code": "TOLL",
+        "currency": "CNY",
+        "amount_basis": "GROSS",
+        "effective_from": "2026-09-01T00:00:00+08:00",
+        "effective_to": "2026-10-01T00:00:00+08:00",
+        "formula": "ACTUAL_RECEIPT",
+        "rate_minor": 0,
+        "free_seconds": 7200,
+        "block_seconds": 1800,
+        "cap_minor": null,
+        "confirmed": true,
+        "confirmation_ref": "confirm-rule-05",
+        "source_refs": [
+          "synthetic:rates.csv#row=6"
+        ]
+      }
+    ],
+    "source_refs": [
+      "synthetic:trips.csv#trip=T005"
+    ]
+  },
+  {
+    "schema_version": "0.1.0",
+    "group_id": "G06",
+    "workspace_id": "WS-DEMO",
+    "carrier_id": "C-DEMO",
+    "trip_id": "T006",
+    "service_leg_id": "LEG-1",
+    "occurrence_id": "BASE",
+    "route_id": "ROUTE-06",
+    "vehicle_class": "CLASS-DEMO",
+    "charge_code": "BASE",
+    "service_time": "2026-09-06T08:00:00+08:00",
+    "currency": "CNY",
+    "amount_basis": "GROSS",
+    "match_state": "EXACT",
+    "trip_status": "EXECUTED",
+    "pod_state": "VERIFIED",
+    "event": {
+      "elapsed_seconds": null,
+      "time_evidence_verified": false,
+      "receipt_minor": null,
+      "receipt_verified": false,
+      "source_refs": []
+    },
+    "bill_lines": [
+      {
+        "line_id": "B06a",
+        "amount_minor": 105000,
+        "reversal_of": null,
+        "source_ref": "synthetic:bill.csv#line=B06a"
+      }
+    ],
+    "rules": [
+      {
+        "schema_version": "0.1.0",
+        "rule_id": "R06",
+        "version": 1,
+        "workspace_id": "WS-DEMO",
+        "carrier_id": "C-DEMO",
+        "route_id": "ROUTE-06",
+        "vehicle_class": "CLASS-DEMO",
+        "charge_code": "BASE",
+        "currency": "CNY",
+        "amount_basis": "GROSS",
+        "effective_from": "2026-09-01T00:00:00+08:00",
+        "effective_to": "2026-10-01T00:00:00+08:00",
+        "formula": "PER_TRIP",
+        "rate_minor": 110000,
+        "free_seconds": 7200,
+        "block_seconds": 1800,
+        "cap_minor": null,
+        "confirmed": true,
+        "confirmation_ref": "confirm-rule-06",
+        "source_refs": [
+          "synthetic:rates.csv#row=7"
+        ]
+      }
+    ],
+    "source_refs": [
+      "synthetic:trips.csv#trip=T006"
+    ]
+  },
+  {
+    "schema_version": "0.1.0",
+    "group_id": "G07",
+    "workspace_id": "WS-DEMO",
+    "carrier_id": "C-DEMO",
+    "trip_id": "T007",
+    "service_leg_id": "LEG-1",
+    "occurrence_id": "BASE",
+    "route_id": "ROUTE-07",
+    "vehicle_class": "CLASS-DEMO",
+    "charge_code": "BASE",
+    "service_time": "2026-09-07T08:00:00+08:00",
+    "currency": "CNY",
+    "amount_basis": "GROSS",
+    "match_state": "EXACT",
+    "trip_status": "EXECUTED",
+    "pod_state": "VERIFIED",
+    "event": {
+      "elapsed_seconds": null,
+      "time_evidence_verified": false,
+      "receipt_minor": null,
+      "receipt_verified": false,
+      "source_refs": []
+    },
+    "bill_lines": [
+      {
+        "line_id": "B07a",
+        "amount_minor": 99000,
+        "reversal_of": null,
+        "source_ref": "synthetic:bill.csv#line=B07a"
+      }
+    ],
+    "rules": [
+      {
+        "schema_version": "0.1.0",
+        "rule_id": "R07",
+        "version": 1,
+        "workspace_id": "WS-DEMO",
+        "carrier_id": "C-DEMO",
+        "route_id": "ROUTE-07",
+        "vehicle_class": "CLASS-DEMO",
+        "charge_code": "BASE",
+        "currency": "CNY",
+        "amount_basis": "NET",
+        "effective_from": "2026-09-01T00:00:00+08:00",
+        "effective_to": "2026-10-01T00:00:00+08:00",
+        "formula": "PER_TRIP",
+        "rate_minor": 90000,
+        "free_seconds": 7200,
+        "block_seconds": 1800,
+        "cap_minor": null,
+        "confirmed": true,
+        "confirmation_ref": "confirm-rule-07",
+        "source_refs": [
+          "synthetic:rates.csv#row=8"
+        ]
+      }
+    ],
+    "source_refs": [
+      "synthetic:trips.csv#trip=T007"
+    ]
+  },
+  {
+    "schema_version": "0.1.0",
+    "group_id": "G08",
+    "workspace_id": "WS-DEMO",
+    "carrier_id": "C-DEMO",
+    "trip_id": "T008",
+    "service_leg_id": "LEG-1",
+    "occurrence_id": "BASE",
+    "route_id": "ROUTE-08",
+    "vehicle_class": "CLASS-DEMO",
+    "charge_code": "BASE",
+    "service_time": "2026-09-08T08:00:00+08:00",
+    "currency": "CNY",
+    "amount_basis": "GROSS",
+    "match_state": "EXACT",
+    "trip_status": "EXECUTED",
+    "pod_state": "MISSING",
+    "event": {
+      "elapsed_seconds": null,
+      "time_evidence_verified": false,
+      "receipt_minor": null,
+      "receipt_verified": false,
+      "source_refs": []
+    },
+    "bill_lines": [
+      {
+        "line_id": "B08a",
+        "amount_minor": 125000,
+        "reversal_of": null,
+        "source_ref": "synthetic:bill.csv#line=B08a"
+      }
+    ],
+    "rules": [
+      {
+        "schema_version": "0.1.0",
+        "rule_id": "R08",
+        "version": 1,
+        "workspace_id": "WS-DEMO",
+        "carrier_id": "C-DEMO",
+        "route_id": "ROUTE-08",
+        "vehicle_class": "CLASS-DEMO",
+        "charge_code": "BASE",
+        "currency": "CNY",
+        "amount_basis": "GROSS",
+        "effective_from": "2026-09-01T00:00:00+08:00",
+        "effective_to": "2026-10-01T00:00:00+08:00",
+        "formula": "PER_TRIP",
+        "rate_minor": 125000,
+        "free_seconds": 7200,
+        "block_seconds": 1800,
+        "cap_minor": null,
+        "confirmed": true,
+        "confirmation_ref": "confirm-rule-08",
+        "source_refs": [
+          "synthetic:rates.csv#row=9"
+        ]
+      }
+    ],
+    "source_refs": [
+      "synthetic:trips.csv#trip=T008"
+    ]
+  },
+  {
+    "schema_version": "0.1.0",
+    "group_id": "G09",
+    "workspace_id": "WS-DEMO",
+    "carrier_id": "C-DEMO",
+    "trip_id": "T009",
+    "service_leg_id": "LEG-1",
+    "occurrence_id": "BASE",
+    "route_id": "ROUTE-09",
+    "vehicle_class": "CLASS-DEMO",
+    "charge_code": "BASE",
+    "service_time": "2026-09-09T08:00:00+08:00",
+    "currency": "CNY",
+    "amount_basis": "GROSS",
+    "match_state": "EXACT",
+    "trip_status": "EXECUTED",
+    "pod_state": "VERIFIED",
+    "event": {
+      "elapsed_seconds": null,
+      "time_evidence_verified": false,
+      "receipt_minor": null,
+      "receipt_verified": false,
+      "source_refs": []
+    },
+    "bill_lines": [
+      {
+        "line_id": "B09a",
+        "amount_minor": 120000,
+        "reversal_of": null,
+        "source_ref": "synthetic:bill.csv#line=B09a"
+      },
+      {
+        "line_id": "B09b",
+        "amount_minor": -10000,
+        "reversal_of": "B09a",
+        "source_ref": "synthetic:bill.csv#line=B09b"
+      }
+    ],
+    "rules": [
+      {
+        "schema_version": "0.1.0",
+        "rule_id": "R09",
+        "version": 1,
+        "workspace_id": "WS-DEMO",
+        "carrier_id": "C-DEMO",
+        "route_id": "ROUTE-09",
+        "vehicle_class": "CLASS-DEMO",
+        "charge_code": "BASE",
+        "currency": "CNY",
+        "amount_basis": "GROSS",
+        "effective_from": "2026-09-01T00:00:00+08:00",
+        "effective_to": "2026-10-01T00:00:00+08:00",
+        "formula": "PER_TRIP",
+        "rate_minor": 110000,
+        "free_seconds": 7200,
+        "block_seconds": 1800,
+        "cap_minor": null,
+        "confirmed": true,
+        "confirmation_ref": "confirm-rule-09",
+        "source_refs": [
+          "synthetic:rates.csv#row=10"
+        ]
+      }
+    ],
+    "source_refs": [
+      "synthetic:trips.csv#trip=T009"
+    ]
+  },
+  {
+    "schema_version": "0.1.0",
+    "group_id": "G10",
+    "workspace_id": "WS-DEMO",
+    "carrier_id": "C-DEMO",
+    "trip_id": null,
+    "service_leg_id": "LEG-1",
+    "occurrence_id": "BASE",
+    "route_id": "ROUTE-10",
+    "vehicle_class": "CLASS-DEMO",
+    "charge_code": "BASE",
+    "service_time": "2026-09-10T08:00:00+08:00",
+    "currency": "CNY",
+    "amount_basis": "GROSS",
+    "match_state": "UNMATCHED",
+    "trip_status": "EXECUTED",
+    "pod_state": "VERIFIED",
+    "event": {
+      "elapsed_seconds": null,
+      "time_evidence_verified": false,
+      "receipt_minor": null,
+      "receipt_verified": false,
+      "source_refs": []
+    },
+    "bill_lines": [
+      {
+        "line_id": "B10a",
+        "amount_minor": 70000,
+        "reversal_of": null,
+        "source_ref": "synthetic:bill.csv#line=B10a"
+      }
+    ],
+    "rules": [
+      {
+        "schema_version": "0.1.0",
+        "rule_id": "R10",
+        "version": 1,
+        "workspace_id": "WS-DEMO",
+        "carrier_id": "C-DEMO",
+        "route_id": "ROUTE-10",
+        "vehicle_class": "CLASS-DEMO",
+        "charge_code": "BASE",
+        "currency": "CNY",
+        "amount_basis": "GROSS",
+        "effective_from": "2026-09-01T00:00:00+08:00",
+        "effective_to": "2026-10-01T00:00:00+08:00",
+        "formula": "PER_TRIP",
+        "rate_minor": 70000,
+        "free_seconds": 7200,
+        "block_seconds": 1800,
+        "cap_minor": null,
+        "confirmed": true,
+        "confirmation_ref": "confirm-rule-10",
+        "source_refs": [
+          "synthetic:rates.csv#row=11"
+        ]
+      }
+    ],
+    "source_refs": [
+      "synthetic:trips.csv#trip=T010"
+    ]
+  }
+]

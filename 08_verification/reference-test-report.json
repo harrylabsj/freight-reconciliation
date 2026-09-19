@@ -1,0 +1,12 @@
+{
+  "scope": "design schemas + normalized synthetic reference only",
+  "run_at": "2026-09-19T10:53:24.340248+00:00",
+  "tests_run": 64,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "status": "PASS",
+  "production_acceptance": "NOT_RUN",
+  "workbuddy_host_test": "NOT_RUN",
+  "real_customer_trial": "NOT_RUN"
+}

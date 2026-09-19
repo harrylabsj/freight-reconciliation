@@ -1,0 +1,2 @@
+﻿event_id,trip_id,occurrence_id,elapsed_seconds,time_evidence_verified,note
+E03,T003,EVENT-1,10800,True,SYNTHETIC_TEST_ONLY; this is not real evidence

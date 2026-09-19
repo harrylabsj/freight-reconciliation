@@ -1,0 +1,28 @@
+{
+  "schema_version": "0.1.0",
+  "run_id": "RUN-DEMO",
+  "case_id": "CASE-DEMO",
+  "workspace_id": "WS-DEMO",
+  "case_revision": 1,
+  "rule_bundle_digest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+  "mapping_digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "matching_digest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+  "input_digest": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+  "engine_version": "reference-0.1.0",
+  "source_ids": [
+    "ASSET-DEMO"
+  ],
+  "created_at": "2026-09-19T09:01:00+08:00",
+  "status": "PARTIAL",
+  "bill_line_count": 12,
+  "comparable_line_count": 9,
+  "unresolved_line_count": 3,
+  "out_of_scope_line_count": 0,
+  "source_signed_total_minor": 1062000,
+  "comparable_billed_minor": 885000,
+  "unresolved_billed_minor": 177000,
+  "out_of_scope_billed_minor": 0,
+  "amount_complete": true,
+  "history_coverage_note": "未提供历史数据，未进行历史查重",
+  "supersedes_run_id": null
+}

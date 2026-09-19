@@ -1,0 +1,21 @@
+{
+  "schema_version": "0.1.0",
+  "group_id": "G01",
+  "comparison_status": "COMPARABLE",
+  "evidence_status": "COMPLETE",
+  "billed_minor": 100000,
+  "expected_minor": 100000,
+  "delta_minor": 0,
+  "rule_ref": "R01@1",
+  "issues": [],
+  "trace": [
+    "PER_TRIP: 1 * 100000 = 100000",
+    "DELTA: 100000 - 100000 = 0"
+  ],
+  "source_refs": [
+    "synthetic:bill.csv#line=B01a",
+    "synthetic:rates.csv#row=2",
+    "synthetic:trips.csv#trip=T001"
+  ],
+  "result_digest": "6a90fb95d4f2304773fbd266c607ba53db3cba17408c1960abdbcbfd6468ca2f"
+}

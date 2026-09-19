@@ -1,0 +1,20 @@
+{
+  "schema_version": "0.1.0",
+  "asset_id": "ASSET-DEMO",
+  "workspace_id": "WS-DEMO",
+  "case_id": "CASE-DEMO",
+  "kind": "BILL",
+  "original_name": "synthetic-bill.csv",
+  "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "byte_size": 1000,
+  "imported_at": "2026-09-19T09:00:00+08:00",
+  "parser_version": "NOT_IMPLEMENTED",
+  "scope_note": "合成示例，哈希是占位值，非真实文件摘要",
+  "mime_type": "text/csv",
+  "selected_sheets": [],
+  "detail_rows": 12,
+  "parse_error_rows": 0,
+  "declared_total_minor": 1062000,
+  "parsed_total_minor": 1062000,
+  "amount_complete": true
+}

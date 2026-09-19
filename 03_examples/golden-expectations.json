@@ -1,0 +1,79 @@
+[
+  {
+    "group_id": "G01",
+    "expected_minor": 100000,
+    "delta_minor": 0,
+    "issues": []
+  },
+  {
+    "group_id": "G02",
+    "expected_minor": 120000,
+    "delta_minor": 10000,
+    "issues": [
+      "AMOUNT_HIGH"
+    ]
+  },
+  {
+    "group_id": "G03",
+    "expected_minor": 10000,
+    "delta_minor": 5000,
+    "issues": [
+      "AMOUNT_HIGH"
+    ]
+  },
+  {
+    "group_id": "G04",
+    "expected_minor": 150000,
+    "delta_minor": 150000,
+    "issues": [
+      "AMOUNT_HIGH",
+      "DUPLICATE_SUSPECT"
+    ]
+  },
+  {
+    "group_id": "G05",
+    "expected_minor": null,
+    "delta_minor": null,
+    "issues": [
+      "MISSING_RECEIPT"
+    ]
+  },
+  {
+    "group_id": "G06",
+    "expected_minor": 110000,
+    "delta_minor": -5000,
+    "issues": [
+      "AMOUNT_LOW"
+    ]
+  },
+  {
+    "group_id": "G07",
+    "expected_minor": null,
+    "delta_minor": null,
+    "issues": [
+      "BASIS_MISMATCH"
+    ]
+  },
+  {
+    "group_id": "G08",
+    "expected_minor": 125000,
+    "delta_minor": 0,
+    "issues": [
+      "MISSING_POD"
+    ]
+  },
+  {
+    "group_id": "G09",
+    "expected_minor": 110000,
+    "delta_minor": 0,
+    "issues": []
+  },
+  {
+    "group_id": "G10",
+    "expected_minor": null,
+    "delta_minor": null,
+    "issues": [
+      "UNMATCHED"
+    ]
+  }
+]

@@ -1,0 +1,43 @@
+{
+  "scope": "handoff artifact QA, not production acceptance",
+  "design_version": "0.1.0",
+  "docx_pages": 28,
+  "chapters": 26,
+  "all_pages_visually_reviewed": true,
+  "reference_tests": {
+    "scope": "design schemas + normalized synthetic reference only",
+    "run_at": "2026-09-19T10:53:24.340248+00:00",
+    "tests_run": 64,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "status": "PASS",
+    "production_acceptance": "NOT_RUN",
+    "workbuddy_host_test": "NOT_RUN",
+    "real_customer_trial": "NOT_RUN"
+  },
+  "schema_files": 8,
+  "mcp_input_schemas_checked": 14,
+  "system_acceptance_specs": 80,
+  "system_acceptance_status": "NOT_RUN",
+  "workbook_sheets": [
+    "使用说明",
+    "运输台账",
+    "承运商账单",
+    "合同费率",
+    "履约证据",
+    "等待事件",
+    "实报票据"
+  ],
+  "workbook_formulas": 0,
+  "workbook_macros": false,
+  "workbook_external_links": false,
+  "root_and_package_documents_identical": true,
+  "golden_summary_matched": true,
+  "limitations": [
+    "No production importer/UI/database/auth implementation was executed",
+    "No WorkBuddy host or platform approval test was executed",
+    "No real customer documents, rates or service results were used",
+    "Reference math does not authenticate contracts or receipts"
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "bill_line_count": 12,
+  "group_count": 10,
+  "comparable_line_count": 9,
+  "comparable_group_count": 7,
+  "source_signed_total_minor": 1062000,
+  "comparable_billed_minor": 885000,
+  "expected_comparable_minor": 725000,
+  "unresolved_billed_minor": 177000,
+  "positive_difference_minor": 165000,
+  "negative_difference_minor": -5000,
+  "net_difference_minor": 160000,
+  "abs_total_billed_minor": 1082000,
+  "abs_comparable_billed_minor": 905000
+}
