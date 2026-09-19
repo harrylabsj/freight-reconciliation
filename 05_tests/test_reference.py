@@ -3,6 +3,14 @@ from pathlib import Path
 import copy, json, sys, unittest
 from datetime import datetime
 from jsonschema import Draft202012Validator, FormatChecker
+
+# HANDOFF_DELTA fix 1: fail fast when date-time format checking is not strict.
+# jsonschema only registers the 'date-time' checker when rfc3339-validator is importable;
+# without it, naive timestamps pass format validation silently (schema patterns still block
+# them, but the check must not be assumed). See 06_development/HANDOFF_DELTA.md.
+if 'date-time' not in FormatChecker().checkers:
+    raise SystemExit('FATAL: date-time format checking is not strict. '
+                     'Install 05_tests/requirements-reference.txt (rfc3339-validator).')
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/'04_reference'))
 from reference_engine import reconcile_group, reconcile_all, calculate_wait, yuan_to_minor, InputError
@@ -117,17 +125,24 @@ class ReferenceTests(unittest.TestCase):
         self.assertFalse(v.is_valid(r))
 
 # Each synthetic group and each contract example is counted as a separate test.
-for i,e in enumerate(GOLD):
-    def test(self,i=i,e=e):
+# HANDOFF_DELTA fix 2: generated tests are built by factory functions so no `test`
+# function leaks into module scope; pytest previously collected it and errored
+# on `fixture 'self' not found`. Count must stay 64 under both runners.
+def _make_golden_test(i,e):
+    def test(self):
         r=reconcile_group(self.g(i))
         self.assertEqual({k:r[k] for k in e},e)
-    setattr(ReferenceTests,'test_golden_'+e['group_id'],test)
-for path in sorted((ROOT/'02_contracts').glob('*.schema.json')):
-    def test(self,path=path):
+    return test
+for i,e in enumerate(GOLD):
+    setattr(ReferenceTests,'test_golden_'+e['group_id'],_make_golden_test(i,e))
+def _make_schema_test(path):
+    def test(self):
         sch=json.loads(path.read_text());Draft202012Validator.check_schema(sch)
         example=load('03_examples/'+path.name.replace('.schema.json','.example.json'))
         Draft202012Validator(sch,format_checker=FormatChecker()).validate(example)
-    setattr(ReferenceTests,'test_schema_'+path.stem.replace('.','_').replace('-','_'),test)
+    return test
+for path in sorted((ROOT/'02_contracts').glob('*.schema.json')):
+    setattr(ReferenceTests,'test_schema_'+path.stem.replace('.','_').replace('-','_'),_make_schema_test(path))
 
 def run():
     suite=unittest.defaultTestLoader.loadTestsFromTestCase(ReferenceTests)

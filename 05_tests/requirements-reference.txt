@@ -1,1 +1,4 @@
+# HANDOFF_DELTA fix 1: rfc3339-validator added — jsonschema only registers a strict
+# 'date-time' format checker when it is importable; without it validation degrades silently.
 jsonschema>=4.18,<5
+rfc3339-validator>=0.1.4,<0.2
