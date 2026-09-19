@@ -96,7 +96,9 @@ class ReconciliationService:
         if idempotency_key:
             existing = self._idem_lookup("create_case", idempotency_key, digest)
             if existing:
-                return existing
+                return (self.get_case(existing["case_id"])
+                        if isinstance(existing, dict) and "case_id" in existing
+                        else existing)
         case_id = _new_id("CASE")
         now = _now()
         with self.db.conn:
@@ -115,7 +117,8 @@ class ReconciliationService:
                 (now, self.actor_id, "case_created", case_id,
                  json.dumps({"title": title, "carrier": carrier_id})))
             if idempotency_key:
-                self._idem_store("create_case", idempotency_key, digest, case_id)
+                self._idem_store("create_case", idempotency_key, digest,
+                                 {"case_id": case_id})
         return self.get_case(case_id)
 
     def freight_register_asset(self, case_id: str, upload_path: str, kind: str,
@@ -129,7 +132,9 @@ class ReconciliationService:
         if idempotency_key:
             existing = self._idem_lookup("register_asset", idempotency_key, digest)
             if existing:
-                return existing
+                return (self.ingest.get_asset(existing["asset_id"])
+                        if isinstance(existing, dict) and "asset_id" in existing
+                        else existing)
         asset = self.ingest.register_asset(
             self.workspace_id, case_id, kind, upload_path, self.actor_id,
             declared_total_minor=declared_total_minor,
@@ -139,7 +144,8 @@ class ReconciliationService:
                 "UPDATE cases SET case_revision=case_revision+1, updated_at=? WHERE id=?",
                 (_now(), case_id))
             if idempotency_key:
-                self._idem_store("register_asset", idempotency_key, digest, asset["asset_id"])
+                self._idem_store("register_asset", idempotency_key, digest,
+                                 {"asset_id": asset["asset_id"]})
         return asset
 
     def freight_inspect_asset(self, asset_id: str, cursor: str | None = None,

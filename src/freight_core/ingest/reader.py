@@ -59,7 +59,8 @@ def _sha256_file(path: Path) -> str:
     return h.hexdigest()
 
 
-def _check_zip_bomb(path: Path) -> None:
+def _check_zip_bomb(path) -> None:
+    path = Path(path)
     with zipfile.ZipFile(path) as z:
         total = 0
         for info in z.infolist():
@@ -118,7 +119,7 @@ def read_xlsx_file(path: Path) -> ParsedFile:
     if len(wb_values.sheetnames) > XLSX_MAX_SHEETS:
         raise LimitExceeded("Too many worksheets.")
     parsed = ParsedFile(path=str(path), container="xlsx", sha256=_sha256_file(path),
-                        byte_size=path.stat().st_size)
+                        byte_size=path.stat().st_size, sheets=[])
     for name in wb_values.sheetnames:
         ws = wb_values[name]
         wsf = wb_formulas[name]
@@ -174,6 +175,7 @@ def read_xlsx_file(path: Path) -> ParsedFile:
                 parsed.warnings.append(f"Hidden row {name}!{r} included (not skipped)")
             sheet.rows.append(values)
             sheet.row_numbers.append(r)
+        parsed.sheets.append(sheet)
     return parsed
 
 

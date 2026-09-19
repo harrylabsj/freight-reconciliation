@@ -148,7 +148,7 @@ class ReconcileEngine:
         issues: list[str] = []
         refs = set(g.get("source_refs", []))
         for b in lines:
-            refs.add(f"bill.csv#line={b['line_id']}")
+            refs.add(b.get("source_ref") or f"bill.csv#line={b['line_id']}")
         r = _new_result(g["group_id"], billed)
         trace = r["trace"]
 
