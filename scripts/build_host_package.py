@@ -8,9 +8,11 @@
   skills/<三技能>/SKILL.md
   engine/freight_core/            Core 副本（打包后自包含）
   engine/adapters/mcp_server.py   连接器代码副本
+  engine/adapters/admin_server.py 本地人工确认管理页
   engine/02_contracts/            工具输入契约副本（tools/list 用）
   engine/mcp_main.py              打包布局启动器
   scripts/mcp-stdio.sh            自定位执行壳（venv 优先 ~/.cache/freight-reconciliation）
+  scripts/admin-local.sh          人工确认管理页启动器（需设置 FREIGHT_ADMIN_TOKEN）
   requirements.txt
 
 构建不修改源码树；含本机绝对路径/占位符泄漏即失败。
@@ -22,10 +24,8 @@ import argparse
 import json
 import shutil
 import stat
-import struct
 import subprocess
 import sys
-import zlib
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -56,18 +56,11 @@ def copy_tree(src: Path, dst: Path) -> None:
             shutil.copy2(item, target)
 
 
-def tiny_png(path: Path) -> None:
-    """生成 64x64 纯色 PNG 头像（占位，上架前替换正式视觉资产）。"""
-    import zlib
-    w = h = 64
-    raw = b"".join(b"\x00" + b"\x1f\x4e\x5d" * w for _ in range(h))
-    def chunk(tag: bytes, data: bytes) -> bytes:
-        c = struct.pack(">I", len(data)) + tag + data
-        return c + struct.pack(">I", zlib.crc32(tag + data) & 0xFFFFFFFF)
-    ihdr = struct.pack(">IIBBBBB", w, h, 8, 2, 0, 0, 0)
-    png = (b"\x89PNG\r\n\x1a\n" + chunk(b"IHDR", ihdr)
-           + chunk(b"IDAT", zlib.compress(raw)) + chunk(b"IEND", b""))
-    path.write_bytes(png)
+def copy_avatar(path: Path) -> None:
+    avatar = ROOT / "09_workbuddy_expert" / "avatars" / "haina.png"
+    if not avatar.is_file():
+        fail("market avatar missing")
+    shutil.copy2(avatar, path)
 
 
 def build() -> None:
@@ -78,13 +71,13 @@ def build() -> None:
 
     # 1) agents/<name>.md：frontmatter + 专家正文
     agent_body = (expert / "expert" / "AGENT.md").read_text(encoding="utf-8")
-    agent_body = agent_body.split("# 海纳·运费对账（专家正文）", 1)[1]
+    agent_body = agent_body.split("# 海纳·物流专家（专家正文）", 1)[1]
     agent_md = f"""---
 name: {NAME}
 description: Payer-side freight reconciliation expert: import, deterministic re-calculation, evidence-linked differences. Not a payment approver.
 displayName:
-  zh: 海纳·运费对账
-  en: Haina · Freight Reconciliation
+  zh: 海纳·物流专家
+  en: Haina · Logistics Expert
 profession:
   zh: 物流运费对账专家
   en: Freight Reconciliation Expert
@@ -94,7 +87,7 @@ skills:
   - freight-reconcile-and-explain
   - freight-review-and-export
 ---
-# 海纳·运费对账（专家正文）{agent_body}"""
+# 海纳·物流专家（专家正文）{agent_body}"""
     (OUT / "agents").mkdir()
     (OUT / "agents" / f"{NAME}.md").write_text(agent_md, encoding="utf-8")
 
@@ -109,6 +102,8 @@ skills:
     (OUT / "engine" / "adapters" / "__init__.py").write_text("", encoding="utf-8")
     shutil.copy2(ROOT / "adapters" / "mcp_server.py",
                  OUT / "engine" / "adapters" / "mcp_server.py")
+    shutil.copy2(ROOT / "adapters" / "admin_server.py",
+                 OUT / "engine" / "adapters" / "admin_server.py")
     (OUT / "engine" / "mcp_main.py").write_text(
         '"""打包布局启动器：engine/ 即 sys.path 根（构建时生成，勿手改）。"""\n'
         "import sys\n"
@@ -147,6 +142,21 @@ skills:
         'exec "$PY" "$ROOT/engine/mcp_main.py"\n',
         encoding="utf-8")
     sh.chmod(sh.stat().st_mode | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
+    admin = scripts / "admin-local.sh"
+    admin.write_text(
+        "#!/bin/bash\n"
+        "set -e\n"
+        'if [ -z "${FREIGHT_ADMIN_TOKEN:-}" ]; then\n'
+        '  echo "Set FREIGHT_ADMIN_TOKEN before starting the admin page" >&2\n'
+        "  exit 1\n"
+        "fi\n"
+        'ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"\n'
+        'PY="${FREIGHT_PYTHON:-$HOME/.cache/freight-reconciliation/venv/bin/python}"\n'
+        'export FREIGHT_RECON_ROOT="${FREIGHT_RECON_ROOT:-$HOME/.local/share/freight-reconciliation}"\n'
+        'export PYTHONPATH="$ROOT/engine"\n'
+        'exec "$PY" "$ROOT/engine/adapters/admin_server.py"\n',
+        encoding="utf-8")
+    admin.chmod(admin.stat().st_mode | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
 
     # 5) .mcp.json（stdio，自定位）
     (OUT / ".mcp.json").write_text(json.dumps({
@@ -163,21 +173,21 @@ skills:
         "name": NAME,
         "version": VERSION,
         "description": "Deterministic freight reconciliation core via local stdio MCP.",
-        "author": {"name": "Haina"},
+        "author": {"name": "Haina", "email": "1711496337@qq.com"},
         "agents": [f"./agents/{NAME}.md"],
         "expertType": "agent",
         "agentName": NAME,
         "skills": [f"./skills/{s}" for s in SKILLS],
-        "license": "MIT",
         "keywords": ["freight", "reconciliation", "logistics"],
-        "displayName": {"zh": "海纳·运费对账", "en": "Haina · Freight Reconciliation"},
+        "displayName": {"zh": "海纳·物流专家", "en": "Haina · Logistics Expert"},
         "profession": {"zh": "物流运费对账专家", "en": "Freight Reconciliation Expert"},
         "displayDescription": {
-            "zh": "把运输台账、承运商账单、确认合同费率与履约凭证核对成有依据、可复算、可复核的差异清单。不自动付款或发送。",
+            "zh": "核对运输台账、承运商账单、合同费率与履约凭证，生成可追溯、可复算的运费差异清单，支持人工复核与导出。",
             "en": "Reconcile carrier bills against contracts and evidence; deterministic, auditable differences."},
+        "categoryId": "12-IndustryConsultant",
         "avatar": "avatars/haina.png",
         "defaultInitPrompt": {"zh": "把承运商9月账单与运输台账核对。",
-                              "en": "Reconcile this month's carrier bill."},
+                              "en": "Reconcile the bill against trips."},
         "plugin": NAME,
         "tags": [{"zh": "运费对账", "en": "Freight Reconciliation"},
                  {"zh": "差异核对", "en": "Bill Differences"},
@@ -194,14 +204,21 @@ skills:
     # 7) 头像 / requirements / README
     avatars = OUT / "avatars"
     avatars.mkdir()
-    tiny_png(avatars / "haina.png")
+    copy_avatar(avatars / "haina.png")
     (OUT / "requirements.txt").write_text(
         "jsonschema==4.26.0\nrfc3339-validator==0.1.4\nopenpyxl==3.1.5\n",
         encoding="utf-8")
     (OUT / "README.md").write_text(
         f"# {NAME} 宿主插件包 v{VERSION}\n\n由 scripts/build_host_package.py 确定性构建；"
-        "勿手改。连接器为本地 stdio（engine/mcp_main.py），数据根默认"
-        " ~/.local/share/freight-reconciliation（可用 FREIGHT_RECON_ROOT 覆盖）。\n",
+        "勿手改。需要 Python 3.11+。首次使用先在本机安装锁定依赖：\n\n"
+        "```bash\npython3 -m venv ~/.cache/freight-reconciliation/venv\n"
+        "~/.cache/freight-reconciliation/venv/bin/pip install -r requirements.txt\n```\n\n"
+        "连接器由 .mcp.json 启动。本地人工确认页需单独启动：\n\n"
+        "```bash\nread -s -p '管理页口令: ' FREIGHT_ADMIN_TOKEN; echo\n"
+        "export FREIGHT_ADMIN_TOKEN\n./scripts/admin-local.sh\n```\n\n"
+        "随后访问 http://127.0.0.1:8765/。连接器与管理页须使用同一"
+        " FREIGHT_RECON_ROOT；默认 ~/.local/share/freight-reconciliation。"
+        "仅在本人电脑运行，勿将案件库放在网络共享盘。\n",
         encoding="utf-8")
 
     # 8) 泄漏扫描（本机绝对路径/占位符）

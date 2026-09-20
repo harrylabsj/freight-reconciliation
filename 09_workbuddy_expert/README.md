@@ -1,7 +1,7 @@
-# 海纳·运费对账 — WorkBuddy 专家定稿（v0.2.0）
+# 海纳·物流专家 — WorkBuddy 专家定稿（v0.2.0）
 
 本目录是针对已实现 Core（src/freight_core + adapters）的专家资产定稿；`06_workbuddy_drafts/` 保持交接基线不动。
-仍非可上架成品：无平台 asset_id、无市场图标、连接器打包与实机联调见 HOST-VERIFICATION.md（全部 NOT_RUN）。
+市场包由 `scripts/build_host_package.py` 构建到 `dist/host-plugin/freight-reconciliation/`。现已补齐头像、行业分类、展示文案和作者邮箱，且通过本机 WorkBuddy 专家包校验。2026-09-20 已向 WorkBuddy 开放平台提交 v0.2.0 审核，专家 ID `oe_8b7cbde9e305a91d`；平台状态为「审核中」，尚未公开发布。市场展示名「海纳·物流专家」，职称「物流运费对账专家」，展示分类「行业顾问」，服务类目「工具 - 办公」。客户试点与跨平台验证仍待完成；实机结果见 HOST-VERIFICATION.md。
 
 ```
 09_workbuddy_expert/

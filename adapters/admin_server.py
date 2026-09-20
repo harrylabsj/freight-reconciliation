@@ -55,7 +55,9 @@ class AdminState:
     def __init__(self, root: str):
         self.service = ReconciliationService(root)
         self.sessions: dict[str, str] = {}  # cookie -> csrf
-        self.password = os.environ.get("FREIGHT_ADMIN_TOKEN") or "local"  # 本地单用户
+        self.password = os.environ.get("FREIGHT_ADMIN_TOKEN")
+        if not self.password:
+            raise RuntimeError("FREIGHT_ADMIN_TOKEN is required")
 
 
 STATE: AdminState | None = None

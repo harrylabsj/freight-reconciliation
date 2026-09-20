@@ -22,7 +22,7 @@ python3 08_verification/verify_manifest.py           # mismatch 恰好=HANDOFF_D
 ## 生产测试
 
 ```bash
-.venv/bin/python -m pytest tests -q                  # 61 项全绿
+.venv/bin/python -m pytest tests -q                  # 当前测试总数以输出为准
 ```
 
 分层：unit / property（与参考引擎对齐）/ integration（金标端到端）/ security / integrity / host。

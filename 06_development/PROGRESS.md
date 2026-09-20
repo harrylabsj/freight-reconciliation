@@ -10,7 +10,7 @@
 | M3 人工复核与导出 | ✅ 完成 | SQLite 17+2 表、状态机、五版本号、幂等键、STALE、prepare/confirm 分离、管理页五页面、冻结条件、XLSX 十表+MD 导出、CSV 注入防护、安全必测 |
 | M4 WorkBuddy 专家 | ✅ 本机实机通过（7/7）/ ⏳ Windows+裸机待验 | codebuddy CLI 无头实机：连接器加载/召唤路由/登记/规则/job轮询金标一致/注入对抗/自批拒绝/受信字段拒收 全 PASS；实机发现并修复 4 缺陷（连接器崩溃、契约命名对齐、版本冲突恢复、凭证搜索防护）；余 Windows/裸机项 NOT_RUN |
 | M5 客户平行试点 | ⛔ 未启动 | 外部依赖：真实客户样本、双人金标（§23.2/§24） |
-| M6 上架/Buddy 评估 | ⛔ 未启动 | 依赖 M5 达标 |
+| M6 上架/Buddy 评估 | ⏳ 专家已提审，尚未公开发布；Buddy 评估未启动 | 2026-09-20 提交 WorkBuddy 专家 v0.2.0，ID `oe_8b7cbde9e305a91d`，平台显示「审核中」；M5 客户平行试点仍未启动 |
 
 ## 测试与验证总账（2026-09-19）
 
@@ -27,7 +27,7 @@
 
 ## 诚实边界（未完成/未验证）
 
-- WorkBuddy 实机联调（HOST-VERIFICATION 12 项 NOT_RUN）；本机仅验证了 stdio 协议层。
+- WorkBuddy 本机已完成 codebuddy CLI 无头实机联调；Windows、全新裸机、WorkBuddy.app 交互界面和运行中断恢复仍待验证（详见 HOST-VERIFICATION.md）。
 - 真实客户数据、双人真实金标、三方对照试点（M5）与上架材料（M6）。
 - 运行崩溃后的 RECOVERY_REQUIRED 检查点恢复与一致性备份命令（AT-052/055）：文件层
   staging+原子发布+回收已实现，数据库恢复扫描器未实现。
