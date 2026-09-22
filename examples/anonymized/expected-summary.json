@@ -1,0 +1,30 @@
+{
+  "job_status": "SUCCEEDED",
+  "summary": {
+    "bill_line_count": 3,
+    "group_count": 3,
+    "comparable_line_count": 2,
+    "comparable_group_count": 2,
+    "source_signed_total_minor": 510000,
+    "comparable_billed_minor": 460000,
+    "expected_comparable_minor": 440000,
+    "unresolved_billed_minor": 50000,
+    "out_of_scope_billed_minor": 0,
+    "out_of_scope_line_count": 0,
+    "positive_difference_minor": 20000,
+    "negative_difference_minor": 0,
+    "net_difference_minor": 20000,
+    "abs_total_billed_minor": 510000,
+    "abs_comparable_billed_minor": 460000
+  },
+  "coverage": {
+    "comparable_lines": "2/3",
+    "amount_ratio_abs": 0.9019607843137255,
+    "coverage_note": "金额覆盖使用绝对账单行金额，避免冲销掩盖（§14）"
+  },
+  "issue_codes": [
+    "AMOUNT_HIGH",
+    "MISSING_POD",
+    "UNMATCHED"
+  ]
+}

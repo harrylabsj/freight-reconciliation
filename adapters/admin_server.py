@@ -26,7 +26,9 @@ from pathlib import Path
 from urllib.parse import urlparse, parse_qs
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(REPO_ROOT / "src"))
+# 开发树布局才把 src/ 插进 sys.path；pip/uvx 安装后 freight_core 已可直接导入。
+if (REPO_ROOT / "src" / "freight_core").is_dir():
+    sys.path.insert(0, str(REPO_ROOT / "src"))
 
 from freight_core.service import ReconciliationService  # noqa: E402
 from freight_core.errors import FreightError  # noqa: E402

@@ -18,7 +18,9 @@ import uuid
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(REPO_ROOT / "src"))
+# 开发树布局才把 src/ 插进 sys.path；pip/uvx 安装后 freight_core 已可直接导入。
+if (REPO_ROOT / "src" / "freight_core").is_dir():
+    sys.path.insert(0, str(REPO_ROOT / "src"))
 
 from freight_core import SCHEMA_VERSION  # noqa: E402
 from freight_core.errors import FreightError, InvalidInput  # noqa: E402
@@ -59,12 +61,29 @@ TOOL_DESCRIPTIONS = {
 
 
 def _load_tool_schemas() -> dict:
-    path = REPO_ROOT / "02_contracts" / "mcp-tools.draft.json"
-    if not path.exists():
-        return {}
-    raw = json.loads(path.read_text(encoding="utf-8"))
-    tools = raw if isinstance(raw, list) else raw.get("tools", [])
-    return {t["name"]: t for t in tools if isinstance(t, dict) and "name" in t}
+    """契约读取三级回退（可移植，不依赖宿主注入的根路径）：
+
+    1. FREIGHT_CONTRACTS_DIR 环境变量（显式覆盖）；
+    2. 已安装的 freight_contracts 包资源（pip/uvx 形态）；
+    3. 开发树 <repo>/02_contracts/。
+    """
+    candidates: list[Path] = []
+    env_dir = os.environ.get("FREIGHT_CONTRACTS_DIR")
+    if env_dir:
+        candidates.append(Path(env_dir) / "mcp-tools.draft.json")
+    try:
+        from importlib import resources
+        candidates.append(Path(str(
+            resources.files("freight_contracts") / "mcp-tools.draft.json")))
+    except Exception:  # noqa: BLE001 — 未安装形态走开发树回退
+        pass
+    candidates.append(REPO_ROOT / "02_contracts" / "mcp-tools.draft.json")
+    for path in candidates:
+        if path.exists():
+            raw = json.loads(path.read_text(encoding="utf-8"))
+            tools = raw if isinstance(raw, list) else raw.get("tools", [])
+            return {t["name"]: t for t in tools if isinstance(t, dict) and "name" in t}
+    return {}
 
 
 class McpServer:

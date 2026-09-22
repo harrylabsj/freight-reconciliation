@@ -1,0 +1,4 @@
+﻿line_id,carrier_id,trip_ref,service_leg_id,charge_code,occurrence_id,amount_minor,currency,amount_basis,reversal_of
+AB01,CARRIER-A,T-A01,LEG-1,BASE,BASE,200000,CNY,GROSS,
+AB02,CARRIER-A,T-A02,LEG-1,BASE,BASE,260000,CNY,GROSS,
+AB03,CARRIER-A,,LEG-1,BASE,BASE,50000,CNY,GROSS,

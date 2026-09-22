@@ -12,9 +12,10 @@ import threading
 import uuid
 
 from . import ENGINE_VERSION, SCHEMA_VERSION
-from .domain import (CASE_DRAFT, CASE_REVIEW_REQUIRED, CASE_RUNNING, JOB_FAILED,
-                     JOB_PARTIAL, JOB_QUEUED, JOB_RUNNING, JOB_SUCCEEDED, MAX_PAGE_LIMIT,
-                     OBJECT_CONFIRMED, RUN_FAILED, RUN_PARTIAL, RUN_SUCCEEDED)
+from .domain import (CASE_DRAFT, CASE_READY, CASE_REVIEW_REQUIRED, CASE_RUNNING,
+                     JOB_FAILED, JOB_PARTIAL, JOB_QUEUED, JOB_RUNNING, JOB_SUCCEEDED,
+                     MAX_PAGE_LIMIT, OBJECT_CONFIRMED, RUN_FAILED, RUN_PARTIAL,
+                     RUN_SUCCEEDED)
 from .errors import (AccessDenied, IdempotencyConflict, InvalidInput, NotFound,
                      VersionConflict)
 from .export.service import ExportService
@@ -72,6 +73,32 @@ class ReconciliationService:
         self.reviews = ReviewService(self.db)
         self.exports = ExportService(self.db, self.files)
         self._jobs: dict[str, threading.Thread] = {}
+        self._recover_interrupted_jobs()
+
+    def _recover_interrupted_jobs(self) -> None:
+        """启动时清扫崩溃残留：job 线程是进程内的，进程重启后库里仍挂着
+        QUEUED/RUNNING 的 job 永远等不到终态。一律标记 FAILED(RUN_INTERRUPTED)
+        并给出恢复动作；卡在 RUNNING 的案件回到 READY，可立即重跑。
+        输入由摘要冻结，重跑是确定性的（§16.1）。
+        """
+        now = _now()
+        err = json.dumps({
+            "code": "RUN_INTERRUPTED",
+            "message": "connector process exited before the job reached a terminal"
+                       " state; no partial amounts were committed as final",
+            "retryable": True,
+            "recovery_action": "call freight_start_run again; inputs are frozen by"
+                               " digest so the re-run is deterministic",
+        }, ensure_ascii=False)
+        with self.db.conn:
+            cur = self.db.conn.execute(
+                "UPDATE jobs SET status=?, error=?, finished_at=?"
+                " WHERE status IN (?, ?)",
+                (JOB_FAILED, err, now, JOB_QUEUED, JOB_RUNNING))
+            if cur.rowcount:
+                self.db.conn.execute(
+                    "UPDATE cases SET status=?, updated_at=? WHERE status=?",
+                    (CASE_READY, now, CASE_RUNNING))
 
     def close(self) -> None:
         self.db.close()

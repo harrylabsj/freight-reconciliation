@@ -31,7 +31,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "dist" / "host-plugin" / "freight-reconciliation"
 NAME = "freight-reconciliation"
-VERSION = "0.2.0"
+VERSION = "0.3.0"
 
 LEAK_PATTERNS = ("/Users/", "REPLACE_WITH_", "HANDOFF_DELTA", "MANIFEST.sha256")
 
@@ -123,9 +123,12 @@ skills:
     sh = scripts / "mcp-stdio.sh"
     sh.write_text(
         "#!/bin/bash\n"
-        "# 自定位：依赖 ${CODEBUDDY_PLUGIN_ROOT} 注入；直跑时按脚本位置回退。\n"
+        "# 可移植根解析：WorkBuddy 注入 ${CODEBUDDY_PLUGIN_ROOT}，Hermes 等便携宿主\n"
+        "# 注入 ${PLUGIN_ROOT}；都没有时按脚本位置回退。三种形态共用本脚本。\n"
         'if [ -n "${CODEBUDDY_PLUGIN_ROOT:-}" ] && [ -d "${CODEBUDDY_PLUGIN_ROOT}/engine" ]; then\n'
         '  ROOT="${CODEBUDDY_PLUGIN_ROOT}"\n'
+        'elif [ -n "${PLUGIN_ROOT:-}" ] && [ -d "${PLUGIN_ROOT}/engine" ]; then\n'
+        '  ROOT="${PLUGIN_ROOT}"\n'
         "else\n"
         '  SELF="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"\n'
         '  ROOT="$(dirname "$SELF")"\n'
@@ -158,6 +161,35 @@ skills:
         encoding="utf-8")
     admin.chmod(admin.stat().st_mode | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
 
+    # 4b) Windows 启动脚本（与 sh 同一套可移植根解析）
+    ps1 = scripts / "mcp-stdio.ps1"
+    ps1.write_text(
+        "# portable root resolution: CODEBUDDY_PLUGIN_ROOT -> PLUGIN_ROOT -> script dir\n"
+        "$root = $null\n"
+        "if ($env:CODEBUDDY_PLUGIN_ROOT -and (Test-Path (Join-Path $env:CODEBUDDY_PLUGIN_ROOT 'engine'))) {\n"
+        "  $root = $env:CODEBUDDY_PLUGIN_ROOT\n"
+        "} elseif ($env:PLUGIN_ROOT -and (Test-Path (Join-Path $env:PLUGIN_ROOT 'engine'))) {\n"
+        "  $root = $env:PLUGIN_ROOT\n"
+        "} else {\n"
+        "  $root = Split-Path -Parent $PSScriptRoot\n"
+        "}\n"
+        "$py = $env:FREIGHT_PYTHON\n"
+        "if (-not $py) {\n"
+        "  $venv = Join-Path $HOME '.cache/freight-reconciliation/venv/Scripts/python.exe'\n"
+        "  if (Test-Path $venv) { $py = $venv } else { $py = 'python' }\n"
+        "}\n"
+        "if (-not $env:FREIGHT_RECON_ROOT) {\n"
+        "  $env:FREIGHT_RECON_ROOT = Join-Path $HOME '.local/share/freight-reconciliation'\n"
+        "}\n"
+        "& $py (Join-Path $root 'engine/mcp_main.py')\n",
+        encoding="utf-8")
+    cmd = scripts / "mcp-stdio.cmd"
+    cmd.write_text(
+        "@echo off\r\n"
+        "rem thin wrapper: keep logic in mcp-stdio.ps1\r\n"
+        "powershell.exe -NoProfile -ExecutionPolicy Bypass -File \"%~dp0mcp-stdio.ps1\" %*\r\n",
+        encoding="utf-8")
+
     # 5) .mcp.json（stdio，自定位）
     (OUT / ".mcp.json").write_text(json.dumps({
         "mcpServers": {NAME: {
@@ -173,6 +205,7 @@ skills:
         "name": NAME,
         "version": VERSION,
         "description": "Deterministic freight reconciliation core via local stdio MCP.",
+        "license": "MIT",
         "author": {"name": "Haina", "email": "1711496337@qq.com"},
         "agents": [f"./agents/{NAME}.md"],
         "expertType": "agent",
@@ -201,10 +234,11 @@ skills:
     (OUT / ".codebuddy-plugin" / "plugin.json").write_text(
         json.dumps(plugin_json, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
-    # 7) 头像 / requirements / README
+    # 7) 头像 / requirements / LICENSE / README
     avatars = OUT / "avatars"
     avatars.mkdir()
     copy_avatar(avatars / "haina.png")
+    shutil.copy2(ROOT / "LICENSE", OUT / "LICENSE")
     (OUT / "requirements.txt").write_text(
         "jsonschema==4.26.0\nrfc3339-validator==0.1.4\nopenpyxl==3.1.5\n",
         encoding="utf-8")

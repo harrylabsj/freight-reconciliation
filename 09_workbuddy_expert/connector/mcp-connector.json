@@ -2,7 +2,7 @@
   "$comment": "本地 stdio 连接器声明草稿（§18.2）。一个连接器只配置一个 MCP Server。字段名与必填项以 WorkBuddy 平台当前官方文档为准，提交前实机验证；不得凭本文件宣称可上架。",
   "name": "freight-reconciliation",
   "display_name": "海纳·运费对账",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "transport": {
     "type": "stdio",
     "command": "python3",

@@ -1,0 +1,3 @@
+﻿trip_id,carrier_id,route_id,vehicle_class,service_leg_id,departed_at,execution_status,order_ids
+T-A01,CARRIER-A,ROUTE-A1,VAN-4T2,LEG-1,2026-09-05T08:00:00+08:00,EXECUTED,ORDER-A1
+T-A02,CARRIER-A,ROUTE-A2,VAN-4T2,LEG-1,2026-09-06T08:00:00+08:00,EXECUTED,ORDER-A2
