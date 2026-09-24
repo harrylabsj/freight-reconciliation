@@ -7,3 +7,7 @@ build/
 dist/hv-runtime/
 dist/hv-state/
 dist/host-plugin/
+
+# runtime state / eval artifacts (never commit)
+hv-state/
+dist/
