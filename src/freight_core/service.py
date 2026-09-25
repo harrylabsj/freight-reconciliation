@@ -604,10 +604,6 @@ class ReconciliationService:
             out = self.matching.apply_manual_match(req["case_id"],
                                                    payload["bill_line_id"],
                                                    payload["trip_id"], self.actor_id)
-            with self.db.conn:
-                self.db.conn.execute(
-                    "UPDATE confirmation_requests SET status='CONFIRMED', actor_id=?,"
-                    " confirmed_at=? WHERE id=?", (self.actor_id, now, confirmation_id))
             out["confirmed"] = True
         elif kind == "review":
             out = self.reviews.confirm(confirmation_id, self.actor_id, nonce)
@@ -616,13 +612,17 @@ class ReconciliationService:
         elif kind == "freeze":
             out = self.exports.freeze_run(self.workspace_id, req["case_id"],
                                           payload["run_id"], self.actor_id)
-            with self.db.conn:
-                self.db.conn.execute(
-                    "UPDATE confirmation_requests SET status='CONFIRMED', actor_id=?,"
-                    " confirmed_at=? WHERE id=?", (self.actor_id, now, confirmation_id))
             out["confirmed"] = True
         else:
             raise InvalidInput(f"unknown confirmation kind {kind}")
+        # 任何 kind 确认成功后都必须把请求行落成 CONFIRMED：此前只有部分分支自己写库，
+        # mapping 分支漏写，导致管理页「待确认」列表里留下已经确认过的幽灵条目（重复确认
+        # 虽幂等，但看起来像没生效）。统一在这里做一次幂等兜底，各子服务已写过则是 no-op。
+        with self.db.conn:
+            self.db.conn.execute(
+                "UPDATE confirmation_requests SET status='CONFIRMED', actor_id=?,"
+                " confirmed_at=? WHERE id=? AND status!='CONFIRMED'",
+                (self.actor_id, now, confirmation_id))
         return out
 
     def _confirm_rules(self, req, payload, now: str) -> dict:

@@ -31,7 +31,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "dist" / "host-plugin" / "freight-reconciliation"
 NAME = "freight-reconciliation"
-VERSION = "0.4.0"
+VERSION = "0.4.1"
 
 LEAK_PATTERNS = ("/Users/", "REPLACE_WITH_", "HANDOFF_DELTA", "MANIFEST.sha256")
 

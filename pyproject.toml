@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "freight-reconciliation"
-version = "0.4.0"
+version = "0.4.1"
 description = "Payer-side deterministic freight reconciliation core: import, re-calculation, evidence-linked differences. Local-first, no auto-payment."
 readme = "README.md"
 requires-python = ">=3.11"

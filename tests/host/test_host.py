@@ -162,13 +162,19 @@ def test_admin_same_origin_confirmation_end_to_end(admin_env):
     resp = client.post(f"/admin/confirmations/{prep['confirmation_id']}/confirm",
                        {"csrf": token}, origin=f"http://127.0.0.1:{ADMIN_PORT}")
     assert resp.status == 200  # 303 → 待确认页
-    assert "Pending confirmations" in resp.read().decode()
+    body = resp.read().decode()
+    assert "Pending confirmations" in body
+    assert prep["confirmation_id"] not in body, "确认过的请求仍在待确认页上（幽灵条目）"
     svc = ReconciliationService(str(admin_env["root"]))
     try:
         row = svc.db.conn.execute(
             "SELECT status FROM mapping_versions WHERE case_id=? AND kind='bill'",
             (case["id"],)).fetchone()
         assert row["status"] == "CONFIRMED", "同源确认必须真正激活映射版本"
+        req = svc.db.conn.execute(
+            "SELECT status FROM confirmation_requests WHERE id=?",
+            (prep["confirmation_id"],)).fetchone()
+        assert req["status"] == "CONFIRMED", "确认过的请求行必须落 CONFIRMED"
     finally:
         svc.close()
 
