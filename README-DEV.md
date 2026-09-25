@@ -49,6 +49,16 @@ import sqlite3,subprocess,sys
   .venv/bin/python adapters/admin_server.py` → http://127.0.0.1:8765/
   （仅 127.0.0.1；会话+CSRF+Origin 检查；prepare/confirm 分离）
 
+## 界面语言（英文默认，中文备用）
+
+文案表在 `src/freight_core/i18n.py`；解析顺序 FREIGHT_LANG → Accept-Language（管理页逐请求）
+→ LC_ALL/LC_MESSAGES/LANG → 英文。管理页每请求按 `Accept-Language` 切换（中文浏览器自动中文），
+连接器无逐请求语言通道，进程启动时解析一次。`FREIGHT_LANG=zh` 可强制中文。
+
+界面所有插值一律经 `html.escape`（`admin_server.e()`）：案件标题、资产文件名、issue 文案、
+决定理由等模型/账单可控文本绝不裸插 HTML。同源校验按解析后的 host 精确比对
+（不做后缀匹配，端口必须等于监听端口）。
+
 ## 目录
 
 ```

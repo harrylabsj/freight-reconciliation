@@ -8,6 +8,8 @@
 - 安全（§17.2/§20.2）：workspace_id/actor_id/confirmed/approval_token 等受信字段出现在
   工具参数中一律拒绝；模型永远无法触达 admin_confirm。
 - 长任务立即返回 job_id，客户端轮询 freight_get_job（§18.2 的 30 秒响应约束）。
+- 工具描述英文默认、中文备用（``freight_core.i18n``）：MCP 没有逐请求语言通道，进程启动时
+  按 FREIGHT_LANG → LC_ALL/LC_MESSAGES/LANG → 英文解析一次。
 """
 from __future__ import annotations
 
@@ -24,6 +26,7 @@ if (REPO_ROOT / "src" / "freight_core").is_dir():
 
 from freight_core import SCHEMA_VERSION  # noqa: E402
 from freight_core.errors import FreightError, InvalidInput  # noqa: E402
+from freight_core.i18n import resolve_lang, tool_description  # noqa: E402
 from freight_core.service import ReconciliationService  # noqa: E402
 
 DEFAULT_ROOT = os.environ.get(
@@ -41,23 +44,6 @@ TOOL_NAMES = [
     "freight_get_job", "freight_get_summary", "freight_list_issues",
     "freight_get_evidence", "freight_prepare_review", "freight_prepare_export",
 ]
-
-TOOL_DESCRIPTIONS = {
-    "freight_create_case": "新建本地对账案件：主体工作区、承运商、账期边界与金额口径。单一 CNY。",
-    "freight_register_asset": "登记来源文件（用户已选择的路径句柄）：bill/trips/rates/waiting/receipts/pod/history_trips。返回 asset_id，不接受任意系统路径以外的授权逃逸。",
-    "freight_inspect_asset": "分页查看已登记资产的列名、脱敏样例、行数与解析问题。",
-    "freight_prepare_mapping": "提交字段映射候选（原列→目标字段）。仅生成待确认草稿，不激活。",
-    "freight_prepare_rate_rules": "把已导入的费率表打包为规则确认候选（含重叠/区间检查）。仅准备，不激活。",
-    "freight_list_match_candidates": "列出待人工关联的账单行与候选运输（P3 仅建议，不自动绑定）。",
-    "freight_prepare_match": "准备一条账单行与车次的人工关联候选。仅准备，不激活。",
-    "freight_start_run": "启动一次确定性重算：冻结输入清单并返回 job_id，用 freight_get_job 轮询。",
-    "freight_get_job": "查询 job 状态、完成/失败计数与恢复说明。",
-    "freight_get_summary": "读取一版运行的金额汇总与覆盖率（分母明确，未知不归零）。",
-    "freight_list_issues": "分页读取结构化差异/缺证/待匹配清单，不截断 JSON。",
-    "freight_get_evidence": "读取单条异常的四栏证据定位（原账单/运输/规则凭证/计算轨迹），脱敏投影。",
-    "freight_prepare_review": "准备一条人工复核决定候选（绑定 result_digest）。仅准备，不激活。",
-    "freight_prepare_export": "准备导出候选（固定投影与用途）。不自动发送；释放需管理页确认。",
-}
 
 
 def _load_tool_schemas() -> dict:
@@ -90,6 +76,8 @@ class McpServer:
     def __init__(self, root: str | None = None, service: ReconciliationService | None = None):
         self.service = service or ReconciliationService(root or DEFAULT_ROOT)
         self.schemas = _load_tool_schemas()
+        # 工具描述英文默认；FREIGHT_LANG / 进程 locale 可切到中文（MCP 无逐请求语言通道）。
+        self.lang = resolve_lang(env=os.environ)
         self.dispatch = {
             "freight_create_case": self.service.freight_create_case,
             "freight_register_asset": self.service.freight_register_asset,
@@ -123,7 +111,7 @@ class McpServer:
         if method == "tools/list":
             tools = [{
                 "name": name,
-                "description": TOOL_DESCRIPTIONS.get(name, name),
+                "description": tool_description(name, self.lang),
                 "inputSchema": (self.schemas.get(name, {}).get("inputSchema")
                                 or {"type": "object", "properties": {}}),
             } for name in TOOL_NAMES]
